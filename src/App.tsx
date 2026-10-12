@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import BookingFlow from "./components/BookingFlow"
 import GalleryModal from "./components/GalleryModal"
 import {
@@ -158,6 +158,63 @@ function App() {
   const [quickCheckOut, setQuickCheckOut] = useState(addDays(today(), 1))
   const [quickGuests, setQuickGuests] = useState(2)
   const [quickRooms, setQuickRooms] = useState(1)
+
+  // Mobile horizontal swipe track refs and tracking
+  const roomsTrackRef = useRef<HTMLDivElement>(null)
+  const [activeRoomIndex, setActiveRoomIndex] = useState(0)
+
+  const reviewsTrackRef = useRef<HTMLDivElement>(null)
+  const [activeReviewIndex, setActiveReviewIndex] = useState(0)
+
+  const scrollRooms = (direction: "left" | "right") => {
+    if (!roomsTrackRef.current) return
+    const cardWidth = roomsTrackRef.current.clientWidth * 0.85
+    roomsTrackRef.current.scrollBy({
+      left: direction === "left" ? -cardWidth : cardWidth,
+      behavior: "smooth",
+    })
+  }
+
+  const scrollRoomsToIndex = (index: number) => {
+    if (!roomsTrackRef.current) return
+    const cardWidth = roomsTrackRef.current.clientWidth * 0.85
+    roomsTrackRef.current.scrollTo({
+      left: index * cardWidth,
+      behavior: "smooth",
+    })
+  }
+
+  const handleRoomsScroll = () => {
+    if (!roomsTrackRef.current) return
+    const { scrollLeft, clientWidth } = roomsTrackRef.current
+    const index = Math.round(scrollLeft / (clientWidth * 0.85))
+    setActiveRoomIndex(Math.min(Math.max(index, 0), ROOMS.length - 1))
+  }
+
+  const scrollReviews = (direction: "left" | "right") => {
+    if (!reviewsTrackRef.current) return
+    const cardWidth = reviewsTrackRef.current.clientWidth * 0.85
+    reviewsTrackRef.current.scrollBy({
+      left: direction === "left" ? -cardWidth : cardWidth,
+      behavior: "smooth",
+    })
+  }
+
+  const scrollReviewsToIndex = (index: number) => {
+    if (!reviewsTrackRef.current) return
+    const cardWidth = reviewsTrackRef.current.clientWidth * 0.85
+    reviewsTrackRef.current.scrollTo({
+      left: index * cardWidth,
+      behavior: "smooth",
+    })
+  }
+
+  const handleReviewsScroll = () => {
+    if (!reviewsTrackRef.current) return
+    const { scrollLeft, clientWidth } = reviewsTrackRef.current
+    const index = Math.round(scrollLeft / (clientWidth * 0.85))
+    setActiveReviewIndex(Math.min(Math.max(index, 0), GOOGLE_REVIEWS.length - 1))
+  }
 
   // Track window scroll to make navbar follow smoothly
   useEffect(() => {
@@ -491,16 +548,60 @@ function App() {
                   <em>to rest.</em>
                 </h2>
               </div>
-              <p className="max-w-sm text-base leading-7 text-ink/60">
-                {HOTEL.roomsTotal} air-conditioned rooms, each with a private bathroom, flat-screen TV, fridge, and free Wi-Fi.
-              </p>
+              <div className="flex flex-col md:items-end">
+                <p className="max-w-sm text-base leading-7 text-ink/60">
+                  {HOTEL.roomsTotal} air-conditioned rooms, each with a private bathroom, flat-screen TV, fridge, and free Wi-Fi.
+                </p>
+
+                {/* Mobile carousel indicator & next/prev arrows */}
+                <div className="mt-4 flex items-center gap-3 md:hidden">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-ink/50">
+                    Room {activeRoomIndex + 1} of {ROOMS.length}
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    {ROOMS.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => scrollRoomsToIndex(i)}
+                        className={`h-1.5 rounded-full transition-all ${
+                          activeRoomIndex === i ? "w-6 bg-clay" : "w-1.5 bg-ink/20"
+                        }`}
+                        aria-label={`Go to room ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+                  <div className="ml-auto flex items-center gap-1.5">
+                    <button
+                      onClick={() => scrollRooms("left")}
+                      className="grid size-9 place-items-center rounded-full border border-ink/20 text-ink transition-colors hover:bg-ink hover:text-cream disabled:opacity-30"
+                      disabled={activeRoomIndex === 0}
+                      aria-label="Previous room"
+                    >
+                      <Icon name="chevron" className="size-4 rotate-180" />
+                    </button>
+                    <button
+                      onClick={() => scrollRooms("right")}
+                      className="grid size-9 place-items-center rounded-full border border-ink/20 text-ink transition-colors hover:bg-ink hover:text-cream disabled:opacity-30"
+                      disabled={activeRoomIndex === ROOMS.length - 1}
+                      aria-label="Next room"
+                    >
+                      <Icon name="chevron" className="size-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {/* Rooms Cards Track: Horizontally moving on mobile, 3-column grid on desktop */}
+            <div
+              ref={roomsTrackRef}
+              onScroll={handleRoomsScroll}
+              className="-mx-6 mt-8 flex gap-5 overflow-x-auto px-6 pb-4 pt-1 snap-x snap-mandatory scroll-smooth no-scrollbar md:mx-0 md:mt-14 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 md:pb-0"
+            >
               {ROOMS.map((r) => (
                 <article
                   key={r.id}
-                  className="flex flex-col justify-between border border-ink/15 bg-sand/40 p-7 transition-all hover:bg-sand/65 sm:p-8"
+                  className="flex w-[84vw] max-w-[21.5rem] shrink-0 snap-center flex-col justify-between border border-ink/15 bg-sand/40 p-7 transition-all hover:bg-sand/65 sm:p-8 md:w-auto md:max-w-none md:shrink"
                 >
                   <div>
                     <div className="flex items-start justify-between">
@@ -540,6 +641,12 @@ function App() {
                   </div>
                 </article>
               ))}
+            </div>
+
+            {/* Mobile swipe indicator cue */}
+            <div className="mt-3 flex items-center justify-between text-xs text-ink/45 md:hidden">
+              <span>Swipe horizontally to view room options</span>
+              <span>3 room categories</span>
             </div>
           </div>
         </section>
@@ -605,27 +712,80 @@ function App() {
                 </div>
               </div>
 
-              {/* Review Cards Grid */}
-              <div className="grid gap-5 sm:grid-cols-2">
-                {GOOGLE_REVIEWS.map((rev) => (
-                  <article key={rev.author} className="flex flex-col justify-between border border-ink/15 bg-cream p-7">
-                    <div>
-                      <div className="flex items-center justify-between text-sunset">
-                        <div className="flex">
-                          {Array.from({ length: rev.rating }).map((_, i) => (
-                            <Icon key={i} name="star" className="size-4" />
-                          ))}
+              {/* Review Cards Column: Horizontally moving on mobile, 2-column grid on tablet/desktop */}
+              <div>
+                {/* Mobile carousel indicator & next/prev arrows for reviews */}
+                <div className="mb-4 flex items-center justify-between sm:hidden">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-ink/50">
+                    Review {activeReviewIndex + 1} of {GOOGLE_REVIEWS.length}
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    {GOOGLE_REVIEWS.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => scrollReviewsToIndex(i)}
+                        className={`h-1.5 rounded-full transition-all ${
+                          activeReviewIndex === i ? "w-5 bg-clay" : "w-1.5 bg-ink/20"
+                        }`}
+                        aria-label={`Go to review ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => scrollReviews("left")}
+                      className="grid size-8 place-items-center rounded-full border border-ink/20 text-ink transition-colors hover:bg-ink hover:text-cream disabled:opacity-30"
+                      disabled={activeReviewIndex === 0}
+                      aria-label="Previous review"
+                    >
+                      <Icon name="chevron" className="size-3.5 rotate-180" />
+                    </button>
+                    <button
+                      onClick={() => scrollReviews("right")}
+                      className="grid size-8 place-items-center rounded-full border border-ink/20 text-ink transition-colors hover:bg-ink hover:text-cream disabled:opacity-30"
+                      disabled={activeReviewIndex === GOOGLE_REVIEWS.length - 1}
+                      aria-label="Next review"
+                    >
+                      <Icon name="chevron" className="size-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Review Cards Track */}
+                <div
+                  ref={reviewsTrackRef}
+                  onScroll={handleReviewsScroll}
+                  className="-mx-6 flex gap-4 overflow-x-auto px-6 pb-4 pt-1 snap-x snap-mandatory scroll-smooth no-scrollbar sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0"
+                >
+                  {GOOGLE_REVIEWS.map((rev) => (
+                    <article
+                      key={rev.author}
+                      className="flex w-[84vw] max-w-[21.5rem] shrink-0 snap-center flex-col justify-between border border-ink/15 bg-cream p-7 shadow-xs sm:w-auto sm:max-w-none sm:shrink"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between text-sunset">
+                          <div className="flex">
+                            {Array.from({ length: rev.rating }).map((_, i) => (
+                              <Icon key={i} name="star" className="size-4" />
+                            ))}
+                          </div>
+                          <span className="text-[0.68rem] font-medium text-ink/40">{rev.date}</span>
                         </div>
-                        <span className="text-[0.68rem] font-medium text-ink/40">{rev.date}</span>
+                        <p className="mt-5 text-sm leading-6 text-ink/80 italic">"{rev.text}"</p>
                       </div>
-                      <p className="mt-5 text-sm leading-6 text-ink/80 italic">"{rev.text}"</p>
-                    </div>
-                    <div className="mt-6 border-t border-ink/10 pt-4">
-                      <p className="text-sm font-bold text-ink">{rev.author}</p>
-                      <p className="text-xs text-ink/50">{rev.origin}</p>
-                    </div>
-                  </article>
-                ))}
+                      <div className="mt-6 border-t border-ink/10 pt-4">
+                        <p className="text-sm font-bold text-ink">{rev.author}</p>
+                        <p className="text-xs text-ink/50">{rev.origin}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+
+                {/* Mobile swipe helper text below reviews */}
+                <div className="mt-3 flex items-center justify-between text-xs text-ink/45 sm:hidden">
+                  <span>Swipe to read guest reviews</span>
+                  <span>{GOOGLE_REVIEWS.length} stories</span>
+                </div>
               </div>
             </div>
           </div>
