@@ -168,51 +168,59 @@ function App() {
 
   const scrollRooms = (direction: "left" | "right") => {
     if (!roomsTrackRef.current) return
-    const cardWidth = roomsTrackRef.current.clientWidth * 0.85
-    roomsTrackRef.current.scrollBy({
-      left: direction === "left" ? -cardWidth : cardWidth,
+    const el = roomsTrackRef.current
+    const card = el.querySelector("article")
+    const step = card ? card.clientWidth + 20 : 320
+    el.scrollBy({
+      left: direction === "left" ? -step : step,
       behavior: "smooth",
     })
   }
 
   const scrollRoomsToIndex = (index: number) => {
     if (!roomsTrackRef.current) return
-    const cardWidth = roomsTrackRef.current.clientWidth * 0.85
-    roomsTrackRef.current.scrollTo({
-      left: index * cardWidth,
-      behavior: "smooth",
-    })
+    const el = roomsTrackRef.current
+    const cards = el.querySelectorAll("article")
+    if (cards[index]) {
+      cards[index].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
+    }
   }
 
   const handleRoomsScroll = () => {
     if (!roomsTrackRef.current) return
-    const { scrollLeft, clientWidth } = roomsTrackRef.current
-    const index = Math.round(scrollLeft / (clientWidth * 0.85))
+    const el = roomsTrackRef.current
+    const card = el.querySelector("article")
+    const step = card ? card.clientWidth + 20 : 320
+    const index = Math.round(el.scrollLeft / step)
     setActiveRoomIndex(Math.min(Math.max(index, 0), ROOMS.length - 1))
   }
 
   const scrollReviews = (direction: "left" | "right") => {
     if (!reviewsTrackRef.current) return
-    const cardWidth = reviewsTrackRef.current.clientWidth * 0.85
-    reviewsTrackRef.current.scrollBy({
-      left: direction === "left" ? -cardWidth : cardWidth,
+    const el = reviewsTrackRef.current
+    const card = el.querySelector("article")
+    const step = card ? card.clientWidth + 16 : 280
+    el.scrollBy({
+      left: direction === "left" ? -step : step,
       behavior: "smooth",
     })
   }
 
   const scrollReviewsToIndex = (index: number) => {
     if (!reviewsTrackRef.current) return
-    const cardWidth = reviewsTrackRef.current.clientWidth * 0.85
-    reviewsTrackRef.current.scrollTo({
-      left: index * cardWidth,
-      behavior: "smooth",
-    })
+    const el = reviewsTrackRef.current
+    const cards = el.querySelectorAll("article")
+    if (cards[index]) {
+      cards[index].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
+    }
   }
 
   const handleReviewsScroll = () => {
     if (!reviewsTrackRef.current) return
-    const { scrollLeft, clientWidth } = reviewsTrackRef.current
-    const index = Math.round(scrollLeft / (clientWidth * 0.85))
+    const el = reviewsTrackRef.current
+    const card = el.querySelector("article")
+    const step = card ? card.clientWidth + 16 : 280
+    const index = Math.round(el.scrollLeft / step)
     setActiveReviewIndex(Math.min(Math.max(index, 0), GOOGLE_REVIEWS.length - 1))
   }
 
@@ -554,10 +562,7 @@ function App() {
                 </p>
 
                 {/* Mobile carousel indicator & next/prev arrows */}
-                <div className="mt-4 flex items-center gap-3 md:hidden">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-ink/50">
-                    Room {activeRoomIndex + 1} of {ROOMS.length}
-                  </span>
+                <div className="mt-4 flex items-center justify-between w-full md:hidden">
                   <div className="flex items-center gap-1.5">
                     {ROOMS.map((_, i) => (
                       <button
@@ -566,11 +571,11 @@ function App() {
                         className={`h-1.5 rounded-full transition-all ${
                           activeRoomIndex === i ? "w-6 bg-clay" : "w-1.5 bg-ink/20"
                         }`}
-                        aria-label={`Go to room ${i + 1}`}
+                        aria-label={`Room ${i + 1}`}
                       />
                     ))}
                   </div>
-                  <div className="ml-auto flex items-center gap-1.5">
+                  <div className="flex items-center gap-2">
                     <button
                       onClick={() => scrollRooms("left")}
                       className="grid size-9 place-items-center rounded-full border border-ink/20 text-ink transition-colors hover:bg-ink hover:text-cream disabled:opacity-30"
@@ -596,12 +601,12 @@ function App() {
             <div
               ref={roomsTrackRef}
               onScroll={handleRoomsScroll}
-              className="-mx-6 mt-8 flex gap-5 overflow-x-auto px-6 pb-4 pt-1 snap-x snap-mandatory scroll-smooth no-scrollbar md:mx-0 md:mt-14 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 md:pb-0"
+              className="mt-8 flex gap-4 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth no-scrollbar w-full min-w-0 md:mt-14 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0"
             >
               {ROOMS.map((r) => (
                 <article
                   key={r.id}
-                  className="flex w-[84vw] max-w-[21.5rem] shrink-0 snap-center flex-col justify-between border border-ink/15 bg-sand/40 p-7 transition-all hover:bg-sand/65 sm:p-8 md:w-auto md:max-w-none md:shrink"
+                  className="flex w-[82vw] max-w-[21rem] shrink-0 snap-start flex-col justify-between border border-ink/15 bg-sand/40 p-6 sm:p-8 transition-all hover:bg-sand/65 md:w-auto md:max-w-none md:shrink"
                 >
                   <div>
                     <div className="flex items-start justify-between">
@@ -642,35 +647,29 @@ function App() {
                 </article>
               ))}
             </div>
-
-            {/* Mobile swipe indicator cue */}
-            <div className="mt-3 flex items-center justify-between text-xs text-ink/45 md:hidden">
-              <span>Swipe horizontally to view room options</span>
-              <span>3 room categories</span>
-            </div>
           </div>
         </section>
 
-        {/* VERIFIED GUEST REVIEWS SECTION - Google Review Cards Grid */}
-        <section id="reviews" className="bg-sand/60 px-6 py-24 lg:px-10 lg:py-32 border-y border-ink/10">
-          <div className="mx-auto max-w-7xl">
-            <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-              <div>
+        {/* VERIFIED GUEST REVIEWS SECTION */}
+        <section id="reviews" className="overflow-hidden bg-sand/60 px-6 py-24 lg:px-10 lg:py-32 border-y border-ink/10">
+          <div className="mx-auto max-w-7xl w-full min-w-0">
+            <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start w-full min-w-0">
+              <div className="w-full min-w-0">
                 <div className="eyebrow mb-6">
                   <span /> Verified Guest Reviews
                 </div>
-                <h2 className="font-display text-[clamp(3.2rem,5.5vw,5.5rem)] leading-[0.9] tracking-[-0.035em]">
-                  Rated 4.1 on Google.
-                  <br />
+                <h2 className="font-display text-[clamp(2.3rem,5.5vw,5.5rem)] leading-[0.92] tracking-[-0.035em] break-words">
+                  Rated 4.1 <span className="max-sm:block">on Google.</span>
+                  <br className="hidden sm:inline" />
                   <em>900+ Stays.</em>
                 </h2>
-                <p className="mt-6 text-base leading-7 text-ink/70">
+                <p className="mt-6 text-base leading-7 text-ink/70 break-words">
                   Direct feedback from business traders, regional visitors, and travelers in transit through Dar es
                   Salaam.
                 </p>
 
                 {/* Score Summary Box */}
-                <div className="mt-8 rounded-sm border border-ink/15 bg-cream p-6 shadow-xs">
+                <div className="mt-8 rounded-sm border border-ink/15 bg-cream p-6 shadow-xs w-full min-w-0">
                   <div className="flex items-center gap-4">
                     <span className="font-display text-6xl font-medium text-ink">4.1</span>
                     <div>
@@ -712,41 +711,38 @@ function App() {
                 </div>
               </div>
 
-              {/* Review Cards Column: Horizontally moving on mobile, 2-column grid on tablet/desktop */}
-              <div>
+              {/* Review Cards Column */}
+              <div className="w-full min-w-0 max-w-full overflow-hidden">
                 {/* Mobile carousel indicator & next/prev arrows for reviews */}
                 <div className="mb-4 flex items-center justify-between sm:hidden">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-ink/50">
-                    Review {activeReviewIndex + 1} of {GOOGLE_REVIEWS.length}
-                  </span>
                   <div className="flex items-center gap-1.5">
                     {GOOGLE_REVIEWS.map((_, i) => (
                       <button
                         key={i}
                         onClick={() => scrollReviewsToIndex(i)}
                         className={`h-1.5 rounded-full transition-all ${
-                          activeReviewIndex === i ? "w-5 bg-clay" : "w-1.5 bg-ink/20"
+                          activeReviewIndex === i ? "w-6 bg-clay" : "w-1.5 bg-ink/20"
                         }`}
-                        aria-label={`Go to review ${i + 1}`}
+                        aria-label={`Review ${i + 1}`}
                       />
                     ))}
                   </div>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-2">
                     <button
                       onClick={() => scrollReviews("left")}
-                      className="grid size-8 place-items-center rounded-full border border-ink/20 text-ink transition-colors hover:bg-ink hover:text-cream disabled:opacity-30"
+                      className="grid size-9 place-items-center rounded-full border border-ink/20 text-ink transition-colors hover:bg-ink hover:text-cream disabled:opacity-30"
                       disabled={activeReviewIndex === 0}
                       aria-label="Previous review"
                     >
-                      <Icon name="chevron" className="size-3.5 rotate-180" />
+                      <Icon name="chevron" className="size-4 rotate-180" />
                     </button>
                     <button
                       onClick={() => scrollReviews("right")}
-                      className="grid size-8 place-items-center rounded-full border border-ink/20 text-ink transition-colors hover:bg-ink hover:text-cream disabled:opacity-30"
+                      className="grid size-9 place-items-center rounded-full border border-ink/20 text-ink transition-colors hover:bg-ink hover:text-cream disabled:opacity-30"
                       disabled={activeReviewIndex === GOOGLE_REVIEWS.length - 1}
                       aria-label="Next review"
                     >
-                      <Icon name="chevron" className="size-3.5" />
+                      <Icon name="chevron" className="size-4" />
                     </button>
                   </div>
                 </div>
@@ -755,12 +751,12 @@ function App() {
                 <div
                   ref={reviewsTrackRef}
                   onScroll={handleReviewsScroll}
-                  className="-mx-6 flex gap-4 overflow-x-auto px-6 pb-4 pt-1 snap-x snap-mandatory scroll-smooth no-scrollbar sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0"
+                  className="flex gap-4 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth no-scrollbar w-full min-w-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:pb-0"
                 >
                   {GOOGLE_REVIEWS.map((rev) => (
                     <article
                       key={rev.author}
-                      className="flex w-[84vw] max-w-[21.5rem] shrink-0 snap-center flex-col justify-between border border-ink/15 bg-cream p-7 shadow-xs sm:w-auto sm:max-w-none sm:shrink"
+                      className="flex w-[82vw] max-w-[21rem] shrink-0 snap-start flex-col justify-between border border-ink/15 bg-cream p-6 shadow-xs sm:w-auto sm:max-w-none sm:shrink sm:p-7"
                     >
                       <div>
                         <div className="flex items-center justify-between text-sunset">
@@ -779,12 +775,6 @@ function App() {
                       </div>
                     </article>
                   ))}
-                </div>
-
-                {/* Mobile swipe helper text below reviews */}
-                <div className="mt-3 flex items-center justify-between text-xs text-ink/45 sm:hidden">
-                  <span>Swipe to read guest reviews</span>
-                  <span>{GOOGLE_REVIEWS.length} stories</span>
                 </div>
               </div>
             </div>
