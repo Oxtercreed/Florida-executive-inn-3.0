@@ -1,0 +1,10 @@
+{
+  "description": "Create stunning landing pages tailored for businesses, enhancing online presence and attracting customers with engaging designs and effective content.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
