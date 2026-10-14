@@ -1,20 +1,18 @@
-// Facts below were cross-checked across Expedia/Hotels.com, Booking.com, Trip.com, Kayak and Tripadvisor listings.
-// Real Google Maps listing: 4.1 stars, 908 reviews, 2-star hotel, Congo Street, Kariakoo, Dar es Salaam.
-
+// Boutique hotel template data tailored for executive, leisure, and business travelers.
 export const HOTEL = {
-  name: "Florida Executive Inn",
-  phone: "+255 765 846 123",
-  phoneTel: "+255765846123",
-  whatsapp: "255765846123",
-  address: ["Congo Street (Omari Londo St)", "Gerezani, Kariakoo · Ilala", "Dar es Salaam, Tanzania"],
+  name: "The Kensington Grand Hotel",
+  phone: "+44 20 7946 0192",
+  phoneTel: "+442079460192",
+  whatsapp: "447700900192",
+  address: ["18 Kensington Gardens Square", "Royal Borough of Kensington & Chelsea", "London, W2 4BH, United Kingdom"],
   roomsTotal: 40,
-  frontDesk: "Front desk open 24 hours",
-  rating: 4.1,
-  reviewsCount: 908,
-  starRating: "2-star hotel",
-  timesNote: "Typical check-in from 11:00 and check-out by 10:00; 24h desk confirms late and midnight arrivals.",
+  frontDesk: "24-Hour Concierge & Front Desk",
+  rating: 4.9,
+  reviewsCount: 520,
+  starRating: "4-Star Boutique Hotel",
+  timesNote: "Typical check-in from 14:00 and check-out by 11:00; 24h concierge desk accommodates late and midnight arrivals.",
   mapsUrl:
-    "https://www.google.com/maps/place/Florida+Executive+Inn/@-6.8247631,39.2728843,17z/data=!4m9!3m8!1s0x185c4baa3d8ce805:0x32df0c2e11846fc6!5m2!4m1!1i2!8m2!3d-6.8247631!4d39.2754592!16s%2Fg%2F11cnxyr54k",
+    "https://maps.google.com/?q=Kensington+Gardens+Square+London",
 }
 
 export type Room = {
@@ -25,7 +23,8 @@ export type Room = {
   view: string
   sleeps: number
   rate: number // USD
-  rateTzs: number // TSh (~2,500 TZS per USD)
+  rateGbp: number // GBP (£)
+  rateTzs: number // alias
   count: number
   features: string[]
   image: string
@@ -37,12 +36,13 @@ export const ROOMS: Room[] = [
     name: "Standard Double",
     bed: "1 Double bed",
     size: "≈18 m²",
-    view: "City view",
+    view: "Courtyard view",
     sleeps: 2,
-    rate: 34,
-    rateTzs: 85000,
+    rate: 110,
+    rateGbp: 85,
+    rateTzs: 85,
     count: 14,
-    features: ["Air conditioning", "Private en-suite bath", "Flat-screen TV", "Free Wi-Fi", "Work desk"],
+    features: ["Climate control", "En-suite bathroom", "Smart flat-screen TV", "High-speed Wi-Fi", "Work desk"],
     image: "/photos/standard-double.webp",
   },
   {
@@ -50,12 +50,13 @@ export const ROOMS: Room[] = [
     name: "Standard Twin",
     bed: "2 Single beds",
     size: "≈20 m²",
-    view: "City view",
+    view: "Kensington garden view",
     sleeps: 2,
-    rate: 34,
-    rateTzs: 85000,
+    rate: 110,
+    rateGbp: 85,
+    rateTzs: 85,
     count: 12,
-    features: ["Two single beds", "Air conditioning", "Tile floor", "Free Wi-Fi", "Daily housekeeping"],
+    features: ["Two single beds", "Climate control", "Hardwood flooring", "High-speed Wi-Fi", "Daily housekeeping"],
     image: "/photos/standard-twin.webp",
   },
   {
@@ -63,12 +64,13 @@ export const ROOMS: Room[] = [
     name: "Comfort Double",
     bed: "1 Queen bed",
     size: "≈24 m²",
-    view: "Kariakoo city view",
+    view: "London city view",
     sleeps: 2,
-    rate: 42,
-    rateTzs: 105000,
+    rate: 150,
+    rateGbp: 115,
+    rateTzs: 115,
     count: 14,
-    features: ["Queen bed", "Mini fridge", "Air conditioning", "Seating area", "Free Wi-Fi"],
+    features: ["King/Queen bed", "Mini refrigerator", "Climate control", "Seating lounge", "High-speed Wi-Fi"],
     image: "/photos/comfort-double.webp",
   },
 ]
@@ -92,20 +94,20 @@ export const GALLERY_PHOTOS: PhotoItem[] = [
   {
     url: "/photos/hero.webp",
     category: "location",
-    title: "Dar es Salaam Skyline & Port",
-    caption: "Centrally positioned in Gerezani / Kariakoo, close to port and transit.",
+    title: "London Skyline & Kensington",
+    caption: "Centrally positioned in the Royal Borough of Kensington & Chelsea, moments from Hyde Park and express transit.",
   },
   {
     url: "/photos/standard-double.webp",
     category: "rooms",
     title: "Standard Double Room",
-    caption: "Cool air conditioning, private bathroom, and crisp double bed.",
+    caption: "Quiet climate control, private en-suite bathroom, and crisp double bed.",
   },
   {
     url: "/photos/standard-twin.webp",
     category: "rooms",
     title: "Standard Twin Setup",
-    caption: "Two separate single beds ideal for business partners visiting Kariakoo.",
+    caption: "Two separate single beds ideal for business partners and colleagues traveling together.",
   },
   {
     url: "/photos/comfort-double.webp",
@@ -117,78 +119,78 @@ export const GALLERY_PHOTOS: PhotoItem[] = [
     url: "/photos/bathroom.webp",
     category: "rooms",
     title: "Private En-Suite Bathroom",
-    caption: "Tiled private bathroom with hot water shower.",
+    caption: "Tiled private bathroom with rainfall hot water shower.",
   },
   {
     url: "/photos/reception.webp",
     category: "facilities",
-    title: "24-Hour Front Desk",
-    caption: "Attentive reception desk welcoming guests day and night.",
+    title: "24-Hour Concierge & Desk",
+    caption: "Attentive concierge team welcoming guests day and night.",
   },
   {
     url: "/photos/dining.webp",
     category: "dining",
     title: "Breakfast & Dining Lounge",
-    caption: "Morning coffee, tea, and warm breakfast served daily.",
+    caption: "Fresh artisan coffee, tea, and warm British breakfast served daily.",
   },
   {
     url: "/photos/parking.webp",
     category: "facilities",
-    title: "Secure Gated Parking",
-    caption: "On-site private parking with 24-hour perimeter security.",
+    title: "Secure Private Parking",
+    caption: "On-site private courtyard parking with 24-hour perimeter security.",
   },
 ]
 
 export const GOOGLE_REVIEWS = [
   {
-    author: "Juma Masanja",
-    origin: "Mwanza (Kariakoo Business Trader)",
+    author: "Oliver Thornton",
+    origin: "Edinburgh (Corporate Guest)",
     rating: 5,
     date: "1 month ago",
-    text: "The best location if you have goods to buy in Kariakoo. Walked straight to Congo Street shops in under 5 minutes. The air-con was cold which is a lifesaver in Dar es Salaam, and the 24-hour reception made my late 11 PM check-in very fast.",
+    text: "The best location for business in Central London. Quiet, comfortable, and within minutes of Paddington and Kensington High Street. The climate control was whisper-quiet and the 24-hour concierge made my late arrival effortless.",
   },
   {
-    author: "Sarah Kiprono",
-    origin: "Nairobi (Business Traveler)",
+    author: "Charlotte Davies",
+    origin: "Manchester (Weekend City Break)",
     rating: 5,
     date: "2 months ago",
-    text: "Great value for money. Very polite and helpful front desk staff. Having safe parking inside the compound gave me total peace of mind for my car. Wi-Fi was fast enough for work.",
+    text: "Exceptional value and British charm. Very polite and helpful front desk staff. Having private parking in Central London gave us complete peace of mind. Wi-Fi was fast and reliable.",
   },
   {
-    author: "Emmanuel Bakari",
-    origin: "Arusha (Zanzibar Transit)",
-    rating: 4,
+    author: "James Campbell",
+    origin: "Cambridge (Transit & Business)",
+    rating: 5,
     date: "3 months ago",
-    text: "Stayed here overnight before taking the 7:00 AM Azam Ferry to Zanzibar. The ferry port is only an 8-minute ride down the road. Clean bed, hot shower, quiet night sleep. Highly recommend for transit.",
+    text: "Stayed overnight before heading to Heathrow. Paddington express link was seamless. Crisp linens, hot shower, quiet night's sleep. Highly recommend for business and leisure.",
   },
   {
-    author: "Fatma Ally",
-    origin: "Dar es Salaam (Local Stay)",
+    author: "Sophie Bennett",
+    origin: "Surrey (London Staycation)",
     rating: 5,
     date: "4 months ago",
-    text: "Reliable standby generator kicked in immediately when power went off in the neighborhood. Clean room with cold fridge. Staff arranged a taxi for me at 4 AM without issue.",
+    text: "Beautiful boutique atmosphere. Spotlessly clean room with tea & coffee amenities and mini fridge. Concierge arranged an executive black cab for me at 5 AM without hesitation.",
   },
 ]
 
 export const FAQS = [
   {
     q: "What are the check-in and check-out times?",
-    a: "Standard check-in is from 11:00 AM and check-out is by 10:00 AM. Our front desk is open 24 hours a day, so late arrivals (including midnight and early morning) are always accommodated.",
+    a: "Standard check-in is from 14:00 and check-out is by 11:00. Our concierge and reception desk is open 24 hours a day, so late arrivals and early departures are seamlessly accommodated.",
   },
   {
     q: "Which payment methods are accepted?",
-    a: "We accept Cash in Tanzanian Shillings (TZS) and US Dollars (USD), Mobile Money (M-Pesa, Tigo Pesa, Airtel Money), and Visa/Mastercard at the front desk upon arrival.",
+    a: "We accept all major credit and debit cards (Visa, Mastercard, American Express), Apple Pay, Google Pay, and contactless payments at the front desk upon arrival.",
   },
   {
-    q: "Is there reliable power and air conditioning?",
-    a: "Yes. Every room is fitted with a quiet split air-conditioning unit. In addition, the hotel has an automatic standby generator that engages immediately during any city power outage.",
+    q: "Is there climate control and high-speed Wi-Fi?",
+    a: "Yes. Every room is fitted with quiet individual climate control (air conditioning & heating), along with complimentary high-speed optical Wi-Fi throughout the hotel.",
   },
   {
     q: "Is parking on-site and secured?",
-    a: "Yes, we provide free gated on-site parking with 24-hour security guards for all registered guests.",
+    a: "Yes, we provide private on-site courtyard parking with 24-hour security for all registered hotel guests.",
   },
   {
-    q: "Can the front desk arrange transit to Zanzibar Ferry or Airport?",
-    a: "Yes. Our team regularly books reliable, vetted taxis for guests heading to the Zanzibar Ferry (8 minutes away) or Julius Nyerere International Airport (25 minutes).",
+    q: "Can the concierge arrange airport or station transfers?",
+    a: "Yes. Our team regularly books reliable executive transfers to Heathrow Airport (30 minutes), Gatwick, London City Airport, or St. Pancras International station.",
   },
 ]

@@ -1,9 +1,9 @@
-// Booking engine adapted for Florida Executive Inn.
+// Booking engine adapted for The Kensington Grand Hotel.
 // Storage sits behind `repo` for localStorage persistence.
 import { HOTEL, ROOMS, type Room } from "./hotel"
 
 export type Status = "requested" | "confirmed" | "declined" | "cancelled" | "expired" | "checked_in" | "checked_out"
-export type Currency = "TZS" | "USD"
+export type Currency = "GBP" | "USD" | "TZS"
 
 export type Booking = {
   id: string
@@ -49,32 +49,33 @@ export const nightsBetween = (a: string, b: string) =>
 export const fmtDate = (key: string) =>
   new Date(`${key}T12:00:00`).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })
 
+export const gbp = (n: number) => `£${n.toLocaleString("en-GB")}`
 export const usd = (n: number) => `US$${n.toLocaleString("en-US")}`
-export const tzs = (n: number) => `TSh ${n.toLocaleString("en-US")}`
+export const tzs = (n: number) => `£${n.toLocaleString("en-GB")}`
 
-export function fmtMoney(amount: number, cur: Currency = "TZS") {
-  return cur === "TZS" ? tzs(amount) : usd(amount)
+export function fmtMoney(amount: number, cur: Currency = "GBP") {
+  return cur === "USD" ? usd(amount) : gbp(amount)
 }
 
-export function fmtRoomPrice(room: Room, cur: Currency = "TZS") {
-  return cur === "TZS" ? tzs(room.rateTzs) : usd(room.rate)
+export function fmtRoomPrice(room: Room, cur: Currency = "GBP") {
+  return cur === "USD" ? usd(room.rate) : gbp(room.rateGbp ?? room.rateTzs)
 }
 
-export function calcEstimate(room: Room, rooms: number, nights: number, cur: Currency = "TZS") {
-  const rate = cur === "TZS" ? room.rateTzs : room.rate
+export function calcEstimate(room: Room, rooms: number, nights: number, cur: Currency = "GBP") {
+  const rate = cur === "USD" ? room.rate : (room.rateGbp ?? room.rateTzs)
   return rate * rooms * nights
 }
 
-// Tanzanian mobiles (07XXXXXXXX / +2557XXXXXXXX) or any international number.
+// UK mobiles (07XXXXXXXXX / +447XXXXXXXXX) or any international number.
 export function normalizePhone(input: string) {
   const raw = input.replace(/[^\d+]/g, "")
   const digits = raw.replace(/\D/g, "")
-  if (digits.startsWith("255") && digits.length === 12) return `0${digits.slice(3)}`
+  if (digits.startsWith("44") && digits.length === 12) return `0${digits.slice(2)}`
   return raw.startsWith("+") ? `+${digits}` : digits
 }
 export const isValidPhone = (input: string) => {
   const p = normalizePhone(input)
-  return /^0[67]\d{8}$/.test(p) || /^\+\d{8,15}$/.test(p)
+  return /^07\d{9}$/.test(p) || /^\+\d{8,15}$/.test(p)
 }
 
 const live = (b: Booking, now = Date.now()) =>

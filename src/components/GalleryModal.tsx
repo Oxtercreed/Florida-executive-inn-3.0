@@ -32,7 +32,7 @@ export default function GalleryModal({ onClose }: GalleryModalProps) {
             <div className="eyebrow mb-1">
               <span /> Visual Tour
             </div>
-            <h2 className="font-display text-2xl sm:text-3xl">Florida Executive Inn Photos</h2>
+            <h2 className="font-display text-2xl sm:text-3xl">The Kensington Grand Hotel Photos</h2>
           </div>
           <button
             onClick={onClose}
@@ -50,7 +50,7 @@ export default function GalleryModal({ onClose }: GalleryModalProps) {
             { id: "rooms", label: "Rooms & Beds" },
             { id: "facilities", label: "Reception & Security" },
             { id: "dining", label: "Dining & Breakfast" },
-            { id: "location", label: "Kariakoo & City" },
+            { id: "location", label: "Kensington & London" },
           ].map((cat) => (
             <button
               key={cat.id}

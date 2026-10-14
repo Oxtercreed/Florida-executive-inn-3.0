@@ -127,19 +127,19 @@ function Logo({ light = false }: { light?: boolean }) {
     <a
       href="#top"
       className={`group inline-flex items-center gap-3 ${light ? "text-cream" : "text-ink"}`}
-      aria-label="Florida Executive Inn home"
+      aria-label="The Kensington Grand Hotel home"
     >
       <span
         className={`grid size-11 place-items-center rounded-full border ${
           light ? "border-white/35" : "border-ink/20"
         }`}
       >
-        <span className="font-display text-2xl italic">F</span>
+        <span className="font-display text-2xl italic">K</span>
       </span>
       <span className="leading-none">
-        <span className="block font-display text-[1.4rem] tracking-[0.04em]">Florida</span>
+        <span className="block font-display text-[1.4rem] tracking-[0.04em]">The Kensington</span>
         <span className="mt-1 block text-[0.56rem] font-semibold uppercase tracking-[0.32em] opacity-70">
-          Executive Inn
+          Grand Hotel & Suites
         </span>
       </span>
     </a>
@@ -365,7 +365,7 @@ function App() {
           <div className="relative z-10 mx-auto flex h-full max-w-[90rem] flex-col justify-end px-6 lg:px-10">
             <div className="max-w-4xl text-white">
               <div className="eyebrow mb-6 text-white/80">
-                <span /> Your place in Dar es Salaam
+                <span /> Your stay in Central London
               </div>
               <h1 className="max-w-4xl font-display text-[clamp(3.8rem,8.4vw,8.2rem)] font-medium leading-[0.82] tracking-[-0.045em]">
                 Stay close.
@@ -373,8 +373,7 @@ function App() {
                 <em className="font-normal">Feel at ease.</em>
               </h1>
               <p className="mt-7 max-w-md text-base leading-7 text-white/80">
-                A well-placed city stay between Gerezani and Kariakoo: 24-hour front desk, free Wi-Fi and secure
-                parking, and the commercial market a short walk away.
+                A distinguished boutique stay in the Royal Borough of Kensington & Chelsea: 24-hour concierge, high-speed Wi-Fi, secure parking, and London's finest parks a short walk away.
               </p>
             </div>
 
@@ -448,7 +447,7 @@ function App() {
               <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-3 text-xs text-white/65">
                 <div className="flex items-center gap-2">
                   <Icon name="location" className="size-4 text-sunset" />
-                  <span>Congo Street (Omari Londo St), Gerezani · Kariakoo</span>
+                  <span>Harbor View Blvd, Financial District · City Center</span>
                 </div>
                 <div className="flex items-center gap-4">
                   <span>Free cancellation up to 24h</span>
@@ -488,14 +487,14 @@ function App() {
               </div>
               <div className="lg:pt-16">
                 <p className="max-w-xl font-display text-3xl leading-[1.25] text-ink/80">
-                  Whether Dar is your destination or one stop before Zanzibar, settle into a stay that keeps things
-                  simple, personal, and close at hand.
+                  Whether London is your destination or an executive stopover, settle into a boutique stay that keeps things
+                  refined, comfortable, and close at hand.
                 </p>
                 <div className="mt-12 grid gap-5 border-t border-ink/15 pt-8 sm:grid-cols-3">
                   {[
-                    ["clock", "Easy arrivals", "24-hour front desk with late night check-ins"],
-                    ["moon", "Restful nights", "Air-conditioned rooms & standby generator"],
-                    ["heart", "Warm welcome", "Helpful local staff & direct WhatsApp service"],
+                    ["clock", "Easy arrivals", "24-hour concierge with flexible check-ins"],
+                    ["moon", "Restful nights", "Double-glazed acoustic rooms & climate control"],
+                    ["heart", "Warm welcome", "Bespoke British hospitality & direct concierge desk"],
                   ].map(([icon, title, text]) => (
                     <div key={title}>
                       <Icon name={icon as IconName} className="mb-5 size-6 text-clay" />
@@ -520,7 +519,7 @@ function App() {
               </article>
               <article className="relative flex min-h-[35rem] flex-col justify-between overflow-hidden bg-palm p-8 text-cream sm:p-10">
                 <div className="flex items-start justify-between">
-                  <span className="font-display text-8xl leading-none text-cream/10">FEI</span>
+                  <span className="font-display text-8xl leading-none text-cream/10">KGH</span>
                   <Icon name="moon" className="size-8 text-sunset" />
                 </div>
                 <div>
@@ -528,7 +527,7 @@ function App() {
                     <span className="!bg-sunset" /> What guests mention
                   </p>
                   <p className="font-display text-[2.4rem] leading-[1.06]">
-                    Friendly staff, working air-con and Wi-Fi, and Kariakoo a short walk away.
+                    Attentive 24-hour concierge, quiet double-glazed suites, fast Wi-Fi, and Kensington Gardens on your doorstep.
                   </p>
                   <button
                     className="mt-10 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.17em]"
@@ -633,11 +632,11 @@ function App() {
                   <div className="mt-10 border-t border-ink/15 pt-5">
                     <p className="text-[0.62rem] font-bold uppercase tracking-[0.2em] text-ink/40">Rate per night</p>
                     <div className="mt-1.5 flex items-baseline gap-2">
-                      <span className="font-display text-3xl font-semibold">TSh {r.rateTzs.toLocaleString()}</span>
+                      <span className="font-display text-3xl font-semibold">£{r.rateGbp}</span>
                       <span className="text-sm font-medium text-ink/60">/ night</span>
                     </div>
                     <p className="mt-1.5 text-xs text-ink/60">
-                      Equivalent to <strong className="text-ink">US${r.rate}</strong> <span className="text-ink/40">· indicative</span>
+                      Approx. <strong className="text-ink">US${r.rate}</strong> <span className="text-ink/40">· indicative</span>
                     </p>
 
                     <button className="btn-dark mt-7 w-full" onClick={() => openBooking(r.id)}>
@@ -659,28 +658,26 @@ function App() {
                   <span /> Verified Guest Reviews
                 </div>
                 <h2 className="font-display text-[clamp(2.3rem,5.5vw,5.5rem)] leading-[0.92] tracking-[-0.035em] break-words">
-                  Rated 4.1 <span className="max-sm:block">on Google.</span>
+                  Rated {HOTEL.rating} <span className="max-sm:block">on Google.</span>
                   <br className="hidden sm:inline" />
-                  <em>900+ Stays.</em>
+                  <em>{HOTEL.reviewsCount}+ Reviews.</em>
                 </h2>
                 <p className="mt-6 text-base leading-7 text-ink/70 break-words">
-                  Direct feedback from business traders, regional visitors, and travelers in transit through Dar es
-                  Salaam.
+                  Direct feedback from international business guests, executive travelers, and boutique holidaymakers in London.
                 </p>
 
                 {/* Score Summary Box */}
                 <div className="mt-8 rounded-sm border border-ink/15 bg-cream p-6 shadow-xs w-full min-w-0">
                   <div className="flex items-center gap-4">
-                    <span className="font-display text-6xl font-medium text-ink">4.1</span>
+                    <span className="font-display text-6xl font-medium text-ink">{HOTEL.rating}</span>
                     <div>
                       <div className="flex text-sunset">
-                        {[1, 2, 3, 4].map((i) => (
+                        {[1, 2, 3, 4, 5].map((i) => (
                           <Icon key={i} name="star" className="size-5" />
                         ))}
-                        <Icon name="star" className="size-5 opacity-40" />
                       </div>
                       <p className="mt-1 text-xs font-bold uppercase tracking-wider text-ink/60">
-                        908 Google Reviews · 2-Star Hotel
+                        {HOTEL.reviewsCount} Google Reviews · {HOTEL.starRating}
                       </p>
                     </div>
                   </div>
@@ -688,10 +685,10 @@ function App() {
                   {/* Sub-ratings */}
                   <div className="mt-6 space-y-3 border-t border-ink/10 pt-4 text-xs font-semibold">
                     {[
-                      ["Location & Market Access", "4.8 / 5"],
-                      ["Staff Hospitality & 24/7 Desk", "4.6 / 5"],
-                      ["Value for Money", "4.4 / 5"],
-                      ["Air Conditioning & Wi-Fi", "4.2 / 5"],
+                      ["Location & London Access", "4.9 / 5"],
+                      ["Concierge & 24/7 Desk", "4.9 / 5"],
+                      ["Cleanliness & Interior Comfort", "4.8 / 5"],
+                      ["High-Speed Wi-Fi & Workspaces", "4.9 / 5"],
                     ].map(([label, score]) => (
                       <div key={label} className="flex justify-between text-ink/75">
                         <span>{label}</span>
@@ -796,7 +793,7 @@ function App() {
                 </h2>
               </div>
               <p className="max-w-sm text-base leading-7 text-ink/60">
-                Step into the energy of Dar, then return to a place that feels easy. Your stay starts at the heart of the city.
+                Step into the culture and vibrancy of London, then return to a sanctuary of calm. Your stay starts in refined Kensington.
               </p>
             </div>
             <div className="mt-16 grid gap-px overflow-hidden border border-ink/15 bg-ink/15 sm:grid-cols-2 lg:grid-cols-4">
@@ -804,7 +801,7 @@ function App() {
                 ["wifi", "Free Wi-Fi", "In rooms and public areas."],
                 ["parking", "Free parking", "On-site, for guests who drive."],
                 ["clock", "Front desk 24/7", "Late arrival? Someone is always there."],
-                ["people", "Kariakoo on foot", "The market is an 8 to 15 minute walk."],
+                ["people", "Kensington & Parks on foot", "Hyde Park and High Street Kensington are a short stroll away."],
               ].map(([icon, title, text], index) => (
                 <article
                   key={title}
@@ -830,7 +827,7 @@ function App() {
             <img src={images.coast} alt="" aria-hidden="true" loading="lazy" decoding="async" className="size-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/45 to-transparent" />
             <span className="absolute bottom-8 left-8 text-xs font-semibold uppercase tracking-[0.2em] text-white/80">
-              Dar es Salaam • Tanzania
+              London • United Kingdom
             </span>
           </div>
 
@@ -839,12 +836,12 @@ function App() {
               <span className="!bg-sunset" /> In the middle of it all
             </div>
             <h2 className="font-display text-[clamp(3.5rem,6vw,6.4rem)] leading-[0.86] tracking-[-0.04em]">
-              Dar is at
+              London is at
               <br />
               <em>your door.</em>
             </h2>
             <p className="mt-8 max-w-lg text-base leading-7 text-cream/70">
-              Find us on Congo Street in Gerezani, Ilala. Kariakoo Market is an 8 to 15 minute walk, Dar es Salaam Central Station about 13, and Julius Nyerere International Airport roughly 20 minutes by car.
+              Find us on Kensington Gardens Square in the Royal Borough of Kensington and Chelsea. Paddington Station is an 8-minute ride, Heathrow Express connects directly, and Central London is just moments away.
             </p>
             <a
               href={MAPS_URL}
@@ -892,12 +889,12 @@ function App() {
               <span /> Come stay awhile <span />
             </div>
             <h2 className="mx-auto max-w-4xl font-display text-[clamp(3.7rem,7vw,7rem)] leading-[0.9] tracking-[-0.04em]">
-              Your Dar story
+              Your London stay
               <br />
               <em>starts here.</em>
             </h2>
             <p className="mt-6 text-base text-ink/60">
-              Rooms starting from TSh 85,000 (~US$34) per night · 24-Hour Reception
+              Suites starting from £85 (~US$110) per night · 24-Hour Concierge & Reception
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <button className="btn-dark" onClick={() => openBooking()}>
@@ -923,7 +920,7 @@ function App() {
             <div>
               <Logo light />
               <p className="mt-6 max-w-xs text-sm leading-6 text-cream/50">
-                A welcoming city stay in the heart of Dar es Salaam.
+                A welcoming boutique stay in the Royal Borough of Kensington, London.
               </p>
             </div>
             <div>
@@ -953,7 +950,7 @@ function App() {
             </div>
           </div>
           <div className="flex flex-col gap-3 pt-7 text-[0.65rem] uppercase tracking-[0.15em] text-cream/35 sm:flex-row sm:justify-between">
-            <p>© {new Date().getFullYear()} Florida Executive Inn</p>
+            <p>© {new Date().getFullYear()} The Kensington Grand Hotel & Suites</p>
             <a href={MAPS_URL} target="_blank" rel="noreferrer" className="hover:text-cream/80">
               View Google listing
             </a>
@@ -964,7 +961,7 @@ function App() {
       {/* Persistent Floating WhatsApp Direct Inquiry Button */}
       <a
         href={`https://wa.me/${HOTEL.whatsapp}?text=${encodeURIComponent(
-          "Hello Florida Executive Inn, I have a question regarding room availability."
+          "Hello Kensington Grand Hotel, I have a question regarding room availability."
         )}`}
         target="_blank"
         rel="noreferrer"

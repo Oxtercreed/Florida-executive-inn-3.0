@@ -137,11 +137,11 @@ export default function BookingFlow({
               <Row k="Room" v={`${done.rooms} × ${ROOMS.find((r) => r.id === done.roomId)?.name}`} />
               <Row
                 k="Estimate"
-                v={`TSh ${(ROOMS.find((r) => r.id === done.roomId)!.rateTzs * done.rooms * nights).toLocaleString()} (~US$${
+                v={`£${((ROOMS.find((r) => r.id === done.roomId)?.rateGbp ?? 85) * done.rooms * nights).toLocaleString()} (~US$${
                   ROOMS.find((r) => r.id === done.roomId)!.rate * done.rooms * nights
                 }) · Indicative`}
               />
-              <Row k="Payment" v="Pay upon check-in at front desk (Cash, M-Pesa, Card)" />
+              <Row k="Payment" v="Pay upon check-in at reception (Credit/Debit Card, Apple Pay, Cash)" />
             </dl>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a className="btn-dark flex-1" href={whatsappLink(done)} target="_blank" rel="noreferrer">
@@ -206,7 +206,7 @@ export default function BookingFlow({
                   {ROOMS.map((r) => {
                     const n = roomsLeft(r, checkIn, checkOut, bookings)
                     const sold = n < rooms
-                    const totalTzs = r.rateTzs * rooms * nights
+                    const totalGbp = (r.rateGbp ?? r.rateTzs) * rooms * nights
                     const totalUsd = r.rate * rooms * nights
                     return (
                       <button
@@ -229,7 +229,7 @@ export default function BookingFlow({
                           <span className="flex items-baseline justify-between gap-4">
                             <span className="font-display text-2xl">{r.name}</span>
                             <span className="text-sm font-semibold sm:hidden">
-                              TSh {r.rateTzs.toLocaleString()}
+                              £{(r.rateGbp ?? r.rateTzs).toLocaleString()}
                               <span className="font-normal text-ink/50"> (~US${r.rate})</span>
                             </span>
                           </span>
@@ -249,11 +249,11 @@ export default function BookingFlow({
                           <span className="mt-3 block text-xs text-ink/50">
                             {sold
                               ? "Not available for these dates"
-                              : `${nights} night${nights > 1 ? "s" : ""} ≈ TSh ${totalTzs.toLocaleString()} (~US$${totalUsd}) · indicative`}
+                              : `${nights} night${nights > 1 ? "s" : ""} ≈ £${totalGbp.toLocaleString()} (~US$${totalUsd}) · indicative`}
                           </span>
                         </div>
                         <div className="hidden text-right sm:block">
-                          <div className="text-base font-semibold">TSh {r.rateTzs.toLocaleString()}</div>
+                          <div className="text-base font-semibold">£{(r.rateGbp ?? r.rateTzs).toLocaleString()}</div>
                           <div className="text-xs text-ink/60">≈ US${r.rate} / night</div>
                         </div>
                       </button>
@@ -321,7 +321,7 @@ export default function BookingFlow({
                     <Row k="Guest" v={`${name} · ${normalizePhone(phone)}`} />
                     <Row
                       k="Estimate"
-                      v={`TSh ${(room.rateTzs * rooms * nights).toLocaleString()} (~US$${room.rate * rooms * nights})`}
+                      v={`£${(((room.rateGbp ?? room.rateTzs)) * rooms * nights).toLocaleString()} (~US$${room.rate * rooms * nights})`}
                     />
                     <Row k="Payment Policy" v="No online pre-payment required. Pay at desk." />
                   </dl>
